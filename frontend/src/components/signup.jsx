@@ -102,39 +102,3 @@ const SignupPage = ({ signupSubmit }) => {
 
 export default SignupPage;
 
-// import React from 'react';
-
-// const Signup = () => {
-//     const { handleSignup, email, password, handleChange } = useSignup();
-
-//     return (
-//         <div className="form-container">
-//             <h2>Sign Up</h2>
-//             <form onSubmit={handleSignup}>
-//                 <div className="form-group">
-//                     <label>Email:</label>
-//                     <input
-//                         type="email"
-//                         name="email"
-//                         value={email}
-//                         onChange={handleChange}
-//                         required
-//                     />
-//                 </div>
-//                 <div className="form-group">
-//                     <label>Password:</label>
-//                     <input
-//                         type="password"
-//                         name="password"
-//                         value={password}
-//                         onChange={handleChange}
-//                         required
-//                     />
-//                 </div>
-//                 <button type="submit">Sign Up</button>
-//             </form>
-//         </div>
-//     );
-// };
-
-// export default Signup;
