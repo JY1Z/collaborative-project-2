@@ -22,7 +22,6 @@ const signupUser = async (req, res) => {
     date_of_birth,
     membership_status,
   } = req.body;
-
   try {
     if (
       !name ||
@@ -60,7 +59,8 @@ const signupUser = async (req, res) => {
     });
 
     if (user) {
-      const token = generateToken(user._id);
+      console.log(user._id);
+     const token = generateToken(user._id);
       res.status(201).json({ email, token });
     } else {
       res.status(400);
@@ -81,6 +81,7 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
+      console.log(user._id);
       const token = generateToken(user._id);
       res.status(200).json({ email, token });
     } else {
