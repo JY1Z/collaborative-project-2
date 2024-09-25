@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const LoginComponent  = ({ setIsAuthenticated  }) => {
+const LoginComponent  = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -23,11 +23,11 @@ const LoginComponent  = ({ setIsAuthenticated  }) => {
         },
         body: JSON.stringify(user),
       });
-  
+      const data = await response.json();
+
       if (response.ok) {
-        const userData = await response.json();
-        localStorage.setItem("user", JSON.stringify(userData));
-        setIsAuthenticated(true);   
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("token", data.token);
         toast.success("Login Successful");
         navigate("/");   
       } else {

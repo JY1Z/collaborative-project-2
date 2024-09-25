@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const SignupComponent  = ({ setIsAuthenticated }) => {
+const SignupComponent  = () => {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [gender, setGender] = useState('');
@@ -23,10 +23,10 @@ const SignupComponent  = ({ setIsAuthenticated }) => {
 
     const newUser = {
       name,
-      phoneNumber,
+      phone_number: phoneNumber,
       gender,
-      dateOfBirth,
-      membershipStatus,
+      date_of_birth: dateOfBirth,
+      membership_status: membershipStatus,
       email,
       password,
     };
@@ -39,13 +39,11 @@ const SignupComponent  = ({ setIsAuthenticated }) => {
         },
         body: JSON.stringify(newUser),
       });
-
       const data = await response.json();
-
+      
       if (response.ok) {
-        const user = await response.json();
-        localStorage.setItem("user", JSON.stringify(user));
-        setIsAuthenticated(true);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("token", data.token);
         toast.success('Signup Successful');
         navigate('/');  
       } else {

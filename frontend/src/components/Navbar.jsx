@@ -1,17 +1,17 @@
-import { NavLink, useNavigate } from 'react-router-dom'; 
+import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/logo.png';
+import useAuthCheck from '../customHooks/useAuthCheck';
 
-const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
+const Navbar = () => {
   const navigate = useNavigate();
+  const isAuthenticated = useAuthCheck();
 
   // Handle logout
   const handleLogout = () => {
     // Clear user data from localStorage
-    localStorage.removeItem('user');
-    
-    // Update authentication status
-    setIsAuthenticated(false);
-    
+    localStorage.removeItem("email");
+    localStorage.removeItem("token");
+
     // Navigate to the login page
     navigate('/login');
   };

@@ -1,5 +1,3 @@
-//App.js
-import { useState } from 'react';
 import {
   Route,
   createBrowserRouter,
@@ -17,16 +15,16 @@ import Signup from './components/SignupComponent';
 import Login from './components/LoginComponent';
 
 const App = () => {
-  // State to manage authentication
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   // Add New Job
+  const token = localStorage.getItem('token'); // Retrieve the token from local storage
+  
   const addJob = async (newJob) => {
     try {
       const res = await fetch('/api/jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(newJob),
       });
@@ -41,6 +39,10 @@ const App = () => {
     try {
       const res = await fetch(`/api/jobs/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
       });
       if (!res.ok) throw new Error('Failed to delete job');
     } catch (error) {
@@ -55,6 +57,7 @@ const App = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(job),
       });
@@ -64,41 +67,10 @@ const App = () => {
     }
   };
 
-  // Handle Signup
-  const signupSubmit = async (userData) => {
-    try {
-      const res = await fetch('/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-      if (!res.ok) throw new Error('Signup failed');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // Handle Login
-  const loginSubmit = async (credentials) => {
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-      if (!res.ok) throw new Error('Login failed');
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path='/' element={<MainLayout isAuthenticated={isAuthenticated} />}>
+      <Route path='/' element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path='/jobs' element={<JobsPage />} />
         <Route path='/add-job' element={<AddJobPage addJobSubmit={addJob} />} />
@@ -113,11 +85,8 @@ const App = () => {
           loader={jobLoader}
         />
         <Route path='*' element={<NotFoundPage />} />
-        <Route path='/signup' element={<Signup signupSubmit={setIsAuthenticated} />} />
-        <Route path='/login' element={<Login loginSubmit={setIsAuthenticated} />} />
-        <Route path='/' element={<MainLayout isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />}
-/>
-
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
       </Route>
     )
   );
