@@ -34,9 +34,13 @@ const JobListings = ({ isHome = false }) => {
           <Spinner loading={loading} />
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-            {jobs.map((job) => (
-              <JobListing key={job.id} job={job} />
-            ))}
+            {jobs.length === 0 ? (  // 如果没有工作，显示提示信息
+              <p>No jobs available at the moment.</p>
+            ) : (
+              jobs.map((job) => (
+                <JobListing key={job.id} job={job} />  // 渲染工作列表
+              ))
+            )}
           </div>
         )}
       </div>
