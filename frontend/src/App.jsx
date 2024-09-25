@@ -16,12 +16,15 @@ import Login from './components/Login';
 
 const App = () => {
   // Add New Job
+  const token = localStorage.getItem('token'); // Retrieve the token from local storage
+
   const addJob = async (newJob) => {
     try {
       const res = await fetch('/api/jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(newJob),
       });
@@ -36,6 +39,10 @@ const App = () => {
     try {
       const res = await fetch(`/api/jobs/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
       });
       if (!res.ok) throw new Error('Failed to delete job');
     } catch (error) {
@@ -50,6 +57,7 @@ const App = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(job),
       });
@@ -62,10 +70,10 @@ const App = () => {
   // Handle Signup
   const signupSubmit = async (userData) => {
     try {
-      const res = await fetch('/api/signup', {
+      const res = await fetch('/api/users/signup', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(userData),
       });
@@ -78,7 +86,7 @@ const App = () => {
   // Handle Login
   const loginSubmit = async (credentials) => {
     try {
-      const res = await fetch('/api/login', {
+      const res = await fetch('/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
