@@ -1,7 +1,21 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom'; 
 import logo from '../assets/images/logo.png';
 
-const Navbar = () => {
+const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
+  const navigate = useNavigate();
+
+  // Handle logout
+  const handleLogout = () => {
+    // Clear user data from localStorage
+    localStorage.removeItem('user');
+    
+    // Update authentication status
+    setIsAuthenticated(false);
+    
+    // Navigate to the login page
+    navigate('/login');
+  };
+
   const linkClass = ({ isActive }) =>
     isActive
       ? 'bg-black text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
@@ -26,15 +40,28 @@ const Navbar = () => {
                 <NavLink to='/jobs' className={linkClass}>
                   Jobs
                 </NavLink>
-                <NavLink to='/add-job' className={linkClass}>
-                  Add Job
-                </NavLink>
-                <NavLink to='/signup' className={linkClass}>
-                  Signup
-                </NavLink>
-                <NavLink to='/login' className={linkClass}>
-                  Login
-                </NavLink>
+                {isAuthenticated ? (
+                  <>
+                    <NavLink to='/add-job' className={linkClass}>
+                      Add Job
+                    </NavLink>
+                    <button
+                      onClick={handleLogout}
+                      className='text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <NavLink to='/signup' className={linkClass}>
+                      Signup
+                    </NavLink>
+                    <NavLink to='/login' className={linkClass}>
+                      Login
+                    </NavLink>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -1,8 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const requireAuth = require('../middleware/requireAuth')
-const {requestLogger} = require('../middleware/customMiddleware')
-
 const {
   getAllJobs,
   getJobById,
@@ -12,13 +9,8 @@ const {
   // patchJob
 } = require("../controllers/jobControllers");
 
-router.use(requestLogger)
-
 // GET /jobs
 router.get("/", getAllJobs);
-
-// require authentication for following routes
-router.use(requireAuth)
 
 // POST /jobs
 router.post("/", createJob);

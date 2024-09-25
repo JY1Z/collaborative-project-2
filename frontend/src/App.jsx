@@ -1,3 +1,5 @@
+//App.js
+import { useState } from 'react';
 import {
   Route,
   createBrowserRouter,
@@ -11,20 +13,20 @@ import NotFoundPage from './pages/NotFoundPage';
 import JobPage, { jobLoader } from './pages/JobPage';
 import AddJobPage from './pages/AddJobPage';
 import EditJobPage from './pages/EditJobPage';
-import Signup from './components/signup';
-import Login from './components/Login';
+import Signup from './components/SignupComponent';
+import Login from './components/LoginComponent';
 
 const App = () => {
-  // Add New Job
-  const token = localStorage.getItem('token'); // Retrieve the token from local storage
+  // State to manage authentication
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Add New Job
   const addJob = async (newJob) => {
     try {
       const res = await fetch('/api/jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(newJob),
       });
@@ -39,10 +41,6 @@ const App = () => {
     try {
       const res = await fetch(`/api/jobs/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
       });
       if (!res.ok) throw new Error('Failed to delete job');
     } catch (error) {
@@ -57,7 +55,6 @@ const App = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(job),
       });
@@ -70,10 +67,10 @@ const App = () => {
   // Handle Signup
   const signupSubmit = async (userData) => {
     try {
-      const res = await fetch('/api/users/signup', {
+      const res = await fetch('/api/signup', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
       });
@@ -86,7 +83,7 @@ const App = () => {
   // Handle Login
   const loginSubmit = async (credentials) => {
     try {
-      const res = await fetch('/api/users/login', {
+      const res = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,7 +98,7 @@ const App = () => {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path='/' element={<MainLayout />}>
+      <Route path='/' element={<MainLayout isAuthenticated={isAuthenticated} />}>
         <Route index element={<HomePage />} />
         <Route path='/jobs' element={<JobsPage />} />
         <Route path='/add-job' element={<AddJobPage addJobSubmit={addJob} />} />
@@ -116,8 +113,11 @@ const App = () => {
           loader={jobLoader}
         />
         <Route path='*' element={<NotFoundPage />} />
-        <Route path='/signup' element={<Signup signupSubmit={signupSubmit} />} />
-        <Route path='/login' element={<Login loginSubmit={loginSubmit} />} />
+        <Route path='/signup' element={<Signup signupSubmit={setIsAuthenticated} />} />
+        <Route path='/login' element={<Login loginSubmit={setIsAuthenticated} />} />
+        <Route path='/' element={<MainLayout isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />}
+/>
+
       </Route>
     )
   );
