@@ -20,7 +20,7 @@ const LoginPage = ({ loginSubmit }) => {
 
     toast.success('Login Successful');
 
-    return navigate('/dashboard'); // Redirect to dashboard or any appropriate page
+    return navigate('/'); // Redirect to dashboard or any appropriate page
   };
 
   return (

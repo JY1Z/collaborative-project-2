@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -26,7 +27,7 @@ const SignupPage = ({ signupSubmit }) => {
 
     toast.success('Signup Successful');
 
-    return navigate('/login');
+    return navigate('/');
   };
 
   return (
