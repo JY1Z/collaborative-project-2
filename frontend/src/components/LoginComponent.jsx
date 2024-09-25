@@ -16,7 +16,7 @@ const LoginComponent  = ({ setIsAuthenticated  }) => {
     };
   
     try {
-      const response = await fetch("/api/user/login", {
+      const response = await fetch('/api/users/signup', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

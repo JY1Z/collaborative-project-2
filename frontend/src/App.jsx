@@ -115,6 +115,9 @@ const App = () => {
         <Route path='*' element={<NotFoundPage />} />
         <Route path='/signup' element={<Signup signupSubmit={setIsAuthenticated} />} />
         <Route path='/login' element={<Login loginSubmit={setIsAuthenticated} />} />
+        <Route path='/' element={<MainLayout isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />}
+/>
+
       </Route>
     )
   );
