@@ -1,3 +1,5 @@
+//App.js
+import { useState } from 'react';
 import {
   Route,
   createBrowserRouter,
@@ -11,10 +13,13 @@ import NotFoundPage from './pages/NotFoundPage';
 import JobPage, { jobLoader } from './pages/JobPage';
 import AddJobPage from './pages/AddJobPage';
 import EditJobPage from './pages/EditJobPage';
-import Signup from './components/signup';
-import Login from './components/Login';
+import Signup from './components/SignupComponent';
+import Login from './components/LoginComponent';
 
 const App = () => {
+  // State to manage authentication
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   // Add New Job
   const addJob = async (newJob) => {
     try {
@@ -93,7 +98,7 @@ const App = () => {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path='/' element={<MainLayout />}>
+      <Route path='/' element={<MainLayout isAuthenticated={isAuthenticated} />}>
         <Route index element={<HomePage />} />
         <Route path='/jobs' element={<JobsPage />} />
         <Route path='/add-job' element={<AddJobPage addJobSubmit={addJob} />} />
@@ -108,8 +113,8 @@ const App = () => {
           loader={jobLoader}
         />
         <Route path='*' element={<NotFoundPage />} />
-        <Route path='/signup' element={<Signup signupSubmit={signupSubmit} />} />
-        <Route path='/login' element={<Login loginSubmit={loginSubmit} />} />
+        <Route path='/signup' element={<Signup signupSubmit={setIsAuthenticated} />} />
+        <Route path='/login' element={<Login loginSubmit={setIsAuthenticated} />} />
       </Route>
     )
   );

@@ -2,26 +2,43 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const LoginPage = ({ loginSubmit }) => {
+const LoginComponent  = ({ setIsAuthenticated  }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const navigate = useNavigate();
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
-
+  
     const user = {
       email,
       password,
     };
-
-    loginSubmit(user);
-
-    toast.success('Login Successful');
-
-    return navigate('/'); // Redirect to dashboard or any appropriate page
+  
+    try {
+      const response = await fetch("/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+  
+      if (response.ok) {
+        const userData = await response.json();
+        localStorage.setItem("user", JSON.stringify(userData));
+        setIsAuthenticated(true);   
+        toast.success("Login Successful");
+        navigate("/");   
+      } else {
+        toast.error("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      toast.error("Error during login. Please try again.");
+    }
   };
+  
 
   return (
     <section className='bg-indigo-50'>
@@ -77,4 +94,4 @@ const LoginPage = ({ loginSubmit }) => {
   );
 };
 
-export default LoginPage;
+export default LoginComponent;

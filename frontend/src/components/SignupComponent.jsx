@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const SignupPage = () => {
+const SignupComponent  = ({ setIsAuthenticated }) => {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [gender, setGender] = useState('');
@@ -11,7 +11,6 @@ const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
   const navigate = useNavigate();
 
   const submitForm = async (e) => {
@@ -44,14 +43,17 @@ const SignupPage = () => {
       const data = await response.json();
 
       if (response.ok) {
+        const user = await response.json();
+        localStorage.setItem("user", JSON.stringify(user));
+        setIsAuthenticated(true);
         toast.success('Signup Successful');
-        navigate('/'); // Redirect to the home page or a dashboard
+        navigate('/');  
       } else {
         toast.error(data.message || 'Signup Failed');
       }
     } catch (error) {
       toast.error('Signup Failed. Please try again.');
-      console.error('Signup Error:', error);
+      console.error('Error during signup:', error);
     }
   };
 
@@ -211,4 +213,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default SignupComponent ;
