@@ -16,12 +16,12 @@ router.use(requestLogger)
 // GET /jobs
 router.get("/", getAllJobs);
 
+// GET /jobs/:jobId
+router.get("/:jobId", getJobById);
+
 router.use(requireAuth)
 // POST /jobs
 router.post("/", createJob);
-
-// GET /jobs/:jobId
-router.get("/:jobId", getJobById);
 
 // PUT /jobs/:jobId
 router.put("/:jobId", updateJob);
