@@ -11,17 +11,20 @@ import NotFoundPage from './pages/NotFoundPage';
 import JobPage, { jobLoader } from './pages/JobPage';
 import AddJobPage from './pages/AddJobPage';
 import EditJobPage from './pages/EditJobPage';
-import Signup from './components/signup';
-import Login from './components/Login';
+import Signup from './components/SignupComponent';
+import Login from './components/LoginComponent';
 
 const App = () => {
   // Add New Job
+  const token = localStorage.getItem('token'); // Retrieve the token from local storage
+  
   const addJob = async (newJob) => {
     try {
       const res = await fetch('/api/jobs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(newJob),
       });
@@ -36,6 +39,10 @@ const App = () => {
     try {
       const res = await fetch(`/api/jobs/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
       });
       if (!res.ok) throw new Error('Failed to delete job');
     } catch (error) {
@@ -50,6 +57,7 @@ const App = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(job),
       });
@@ -59,37 +67,6 @@ const App = () => {
     }
   };
 
-  // Handle Signup
-  const signupSubmit = async (userData) => {
-    try {
-      const res = await fetch('/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-      if (!res.ok) throw new Error('Signup failed');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // Handle Login
-  const loginSubmit = async (credentials) => {
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-      if (!res.ok) throw new Error('Login failed');
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -108,8 +85,8 @@ const App = () => {
           loader={jobLoader}
         />
         <Route path='*' element={<NotFoundPage />} />
-        <Route path='/signup' element={<Signup signupSubmit={signupSubmit} />} />
-        <Route path='/login' element={<Login loginSubmit={loginSubmit} />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
       </Route>
     )
   );

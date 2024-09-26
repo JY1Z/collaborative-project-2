@@ -9,9 +9,14 @@ const {
   // patchJob
 } = require("../controllers/jobControllers");
 
+const requireAuth = require('../middleware/requireAuth')
+const {requestLogger} = require('../middleware/customMiddleware')
+router.use(requestLogger)
+
 // GET /jobs
 router.get("/", getAllJobs);
 
+router.use(requireAuth)
 // POST /jobs
 router.post("/", createJob);
 
