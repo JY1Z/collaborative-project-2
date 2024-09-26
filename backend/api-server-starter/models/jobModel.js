@@ -17,8 +17,8 @@ const jobSchema = new mongoose.Schema({
 });
 
 jobSchema.set('toJSON', {
-virtuals: true,
-transform: (doc, ret) => {
+  virtuals: true,
+  transform: (doc, ret) => {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
